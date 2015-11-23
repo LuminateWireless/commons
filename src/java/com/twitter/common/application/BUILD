@@ -14,6 +14,9 @@
 # limitations under the License.
 # ==================================================================================================
 
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
 ACTION_SOURCES = [
   'Lifecycle.java',
   'ShutdownRegistry.java',
@@ -22,35 +25,28 @@ ACTION_SOURCES = [
   'StartupStage.java',
 ]
 
-java_library(name = 'action',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-action',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/base',
+java_library(
+  name = 'action',
+  deps = [
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
   ],
-  sources = ACTION_SOURCES
+  srcs = ACTION_SOURCES
 )
 
-java_library(name = 'application',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/application/modules:applauncher',
-    'src/java/com/twitter/common/application/modules:lifecycle',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net/http/handlers',
+java_library(
+  name = 'application',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application/modules:applauncher',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application/modules:lifecycle',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers',
   ],
-  sources = globs('*.java', exclude = [ACTION_SOURCES])
+  srcs = glob(['*.java'], exclude = ACTION_SOURCES)
 )

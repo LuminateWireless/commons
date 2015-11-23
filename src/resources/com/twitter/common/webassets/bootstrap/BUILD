@@ -14,14 +14,17 @@
 # limitations under the License.
 # ==================================================================================================
 
-resources(
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+filegroup(
   name='bootstrap',
-  sources=globs(
+  srcs=glob([
     '2.1.1/css/*.css',
     '2.1.1/img/*.png',
     '2.1.1/js/*.js',
     '2.3.2/css/*.css',
     '2.3.2/img/*.png',
     '2.3.2/js/*.js',
-  )
+  ])
 )

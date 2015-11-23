@@ -14,17 +14,18 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name = 'base',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'base',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/util:system-mocks',
+package(default_visibility = ['//visibility:public'])
+
+licenses(['notice'])
+
+java_library(
+  name = 'base',
+  deps = [
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
   ],
-  sources = globs('*.java'),
+  srcs = glob(['*.java']),
 )

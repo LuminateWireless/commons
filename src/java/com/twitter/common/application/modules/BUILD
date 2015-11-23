@@ -14,127 +14,105 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name = 'applauncher',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-applauncher',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/util',
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+java_library(
+  name = 'applauncher',
+  deps = [
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util',
   ],
-  sources = ['AppLauncherModule.java']
+  srcs = ['AppLauncherModule.java']
 )
 
-java_library(name = 'lifecycle',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-lifecycle',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
-    '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net:util',
+java_library(
+  name = 'lifecycle',
+  deps = [
+    '//third_party/java/javax/inject',
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/guice',
+    '//third_party/java/guice:guice-multibindings',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net:util',
   ],
-  sources = ['LifecycleModule.java', 'LocalServiceRegistry.java']
+  srcs = ['LifecycleModule.java', 'LocalServiceRegistry.java']
 )
 
 # TODO(William Farner): Split this up further - HTTP should not require thrift and time-series.
-java_library(name = 'http',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-http',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/inject:guice',
+java_library(
+  name = 'http',
+  deps = [
+    '//third_party/java/guice',
     ':lifecycle',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/application/http',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net/http',
-    'src/java/com/twitter/common/net/http/handlers',
-    'src/java/com/twitter/common/net/http/handlers:time-series',
-    'src/java/com/twitter/common/net/http/handlers/pprof',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application/http',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers:time-series',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers/pprof',
   ],
-  sources = ['HttpModule.java']
+  srcs = ['HttpModule.java']
 )
 
-java_library(name = 'log',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-log',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/logging',
-    'src/java/com/twitter/common/net/http/handlers',
-    'src/java/com/twitter/common/stats:time-series',
+java_library(
+  name = 'log',
+  deps = [
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/logging',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats:time-series',
     ':lifecycle',
   ],
-  sources = ['LogModule.java']
+  srcs = ['LogModule.java']
 )
 
-java_library(name = 'stats',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-stats',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/stats:jvm',
-    'src/java/com/twitter/common/stats:time-series',
-    'src/java/com/twitter/common/util',
+java_library(
+  name = 'stats',
+  deps = [
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats:jvm',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats:time-series',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util',
     ':lifecycle',
   ],
-  sources = ['StatsModule.java']
+  srcs = ['StatsModule.java']
 )
 
-java_library(name = 'stats_export',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-stats_export',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/stats',
+java_library(
+  name = 'stats_export',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats',
     ':lifecycle',
   ],
-  sources = ['StatsExportModule.java']
+  srcs = ['StatsExportModule.java']
 )
 
-java_library(name = 'thrift',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'application-module-thrift',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/inject:guice',
-    'src/java/com/twitter/common/application/http',
-    'src/java/com/twitter/common/net/http',
-    'src/java/com/twitter/common/net/http/handlers:thrift',
+java_library(
+  name = 'thrift',
+  deps = [
+    '//third_party/java/guice',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application/http',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers:thrift',
   ],
-  sources = ['ThriftModule.java']
+  srcs = ['ThriftModule.java']
 )

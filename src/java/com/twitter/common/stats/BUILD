@@ -14,64 +14,53 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name = 'stat',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stat',
-    repo = public,
-  ),
-  dependencies = [],
-  sources = ['Stat.java'],
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+java_library(
+  name = 'stat',
+  deps = [],
+  srcs = ['Stat.java'],
 )
 
-java_library(name = 'stats-provider',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stats-provider',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
+java_library(
+  name = 'stats-provider',
+  deps = [
+    '//third_party/java/guava',
     ':stat',
   ],
-  sources = [
+  srcs = [
     'StatsProvider.java',
   ],
 )
 
-java_library(name = 'stat-registry',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stat-registry',
-    repo = public,
-  ),
-  dependencies = [
+java_library(
+  name = 'stat-registry',
+  deps = [
     ':stat',
   ],
-  sources = [
+  srcs = [
     'RecordingStat.java',
     'StatRegistry.java'
   ],
 )
 
-java_library(name = 'stats',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stats',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
+java_library(
+  name = 'stats',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
     ':stat-registry',
     ':stats-provider',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/collections',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/util:sampler',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:sampler',
+    ':stat',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
   ],
-  sources = [
+  srcs = [
     'Elapsed.java',
     'MovingAverage.java',
     'MovingWindowDelta.java',
@@ -89,52 +78,44 @@ java_library(name = 'stats',
   ],
 )
 
-java_library(name = 'jvm',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stats-jvm',
-    repo = public,
-  ),
-  dependencies = [
+java_library(
+  name = 'jvm',
+  deps = [
     ':stats',
-    'src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
   ],
-  sources = [ 'JvmStats.java' ],
+  srcs = [ 'JvmStats.java' ],
 )
 
-java_library(name = 'time-series',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stats-time-series',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
+java_library(
+  name = 'time-series',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/guice',
     ':stat-registry',
     ':stats',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/collections',
-    'src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
   ],
-  sources = [
+  srcs = [
     'TimeSeries.java',
     'TimeSeriesRepository.java',
     'TimeSeriesRepositoryImpl.java',
   ],
 )
 
-java_library(name = 'util',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'stats-util',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/util:util',
+java_library(
+  name = 'util',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:util',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
   ],
-  sources = [
+  srcs = [
     'ApproximateHistogram.java',
     'CounterMap.java',
     'CounterMapWithTopKey.java',

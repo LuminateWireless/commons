@@ -14,7 +14,12 @@
 # limitations under the License.
 # ==================================================================================================
 
-APT_SOURCES = globs('apt/*.java')
+package(default_visibility = ['//visibility:public'])
+
+licenses(['notice'])
+
+APT_SOURCES = glob(['apt/*.java'])
+
 CORE_SOURCES = [
  'Arg.java',
  'ArgParser.java',
@@ -29,75 +34,78 @@ CORE_SOURCES = [
 ]
 DURATION_PARSER = ['parsers/TimeDurationParser.java']
 
-java_library(name = 'core',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'args-core',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
+java_library(
+  name = 'core',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
   ],
-  sources = CORE_SOURCES,
-  excludes = [
-    exclude('com.twitter.common', 'args-core'),
-  ],
+  srcs = CORE_SOURCES,
 )
 
-annotation_processor(name = 'apt',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'args-apt',
-    repo = public,
-  ),
-  dependencies = [
+java_library(
+  name = 'apt_lib',
+  deps = [
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
     ':core',
-    '3rdparty/jvm/commons-lang:commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
   ],
-  sources = APT_SOURCES,
-  processors = [ 'com.twitter.common.args.apt.CmdLineProcessor' ],
-  excludes = [
-    exclude('com.twitter.common', 'args-apt'),
-  ],
+  srcs = APT_SOURCES,
 )
 
-java_library(name = 'args',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'args',
-    repo = public,
-  ),
-  dependencies = [
-    ':apt',
-    ':core',
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net:util',
-    'src/java/com/twitter/common/quantity',
+java_plugin(
+  name = 'apt_private',
+  deps = [
+    ':apt_lib',
   ],
-  sources = rglobs('*.java', exclude=[APT_SOURCES, CORE_SOURCES, DURATION_PARSER]),
-  excludes = [
-    exclude('com.twitter.common', 'args'),
-  ],
-  tags = {
-    # Prefer TwitterServer and com.twitter.app.Flags for argument parsing.
-    'deprecated',
-  },
+  processor_class = 'com.twitter.common.args.apt.CmdLineProcessor',
 )
 
-java_library(name = 'duration_parser',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'args-duration-parser',
-    repo = public,
-  ),
-  dependencies = [
+java_plugin(
+  name = 'apt',
+  deps = [
+    ':apt_lib',
     ':args',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/twitter:util-core',
   ],
-  sources = DURATION_PARSER
+  processor_class = 'com.twitter.common.args.apt.CmdLineProcessor',
 )
+
+java_library(
+  name = 'args',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net:util',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    ':apt_lib',
+    ':core',
+  ],
+  plugins = [
+     ':apt_private'
+  ],
+  srcs = glob(
+    ['*.java', 'constraints/*.java', 'parsers/*.java'], exclude =
+    APT_SOURCES +
+    CORE_SOURCES +
+    DURATION_PARSER
+  ),
+  exports = [
+    ':apt_lib',
+    ':core',
+  ]
+)
+
+# TODO: need to build util-core first.
+#
+# java_library(
+#   name = 'duration_parser',
+#   deps = [
+#     '//third_party/java/guava',
+#     #'3rdparty/jvm/com/twitter:util-core',
+#     ':args',
+#   ],
+#   srcs = DURATION_PARSER
+# )

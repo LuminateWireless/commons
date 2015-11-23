@@ -13,16 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==================================================================================================
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
 
-java_library(name = 'quantity',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'quantity',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/collections',
+java_library(
+  name = 'quantity',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
   ],
-  sources = globs('*.java'),
+  srcs = glob(['*.java']),
 )

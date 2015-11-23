@@ -13,19 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==================================================================================================
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
 
-
-
-java_library(name = 'collections',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'collections',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
+java_library(
+  name = 'collections',
+  deps = [
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
   ],
-  sources = globs('*.java'),
+  srcs = glob(['*.java']),
 )

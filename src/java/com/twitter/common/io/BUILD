@@ -14,79 +14,62 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name = 'io',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'io',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-io',
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+java_library(
+  name = 'io',
+  deps = [
+    '//third_party/java/apache/commons-io',
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
   ],
-  sources = [
+  srcs = [
     'Codec.java',
     'CompatibilityCodec.java',
     'FileUtils.java'
   ]
 )
 
-java_library(name = 'base64zlibcodec',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'io-base64zlibcodec',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-codec',
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/code/gson',
-    '3rdparty/jvm/com/google/guava',
+java_library(
+  name = 'base64zlibcodec',
+  deps = [
+    '//third_party/java/apache/commons-codec',
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/gson',
+    '//third_party/java/guava',
   ],
-  sources = ["Base64ZlibCodec.java"]
+  srcs = ["Base64ZlibCodec.java"]
 )
 
-java_library(name = 'streamer',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'io-streamer',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
+java_library(
+  name = 'streamer',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
   ],
-  sources = [ 'Streamer.java' ]
+  srcs = [ 'Streamer.java' ]
 )
 
-java_library(name = 'thrift',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'io-thrift',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/org/apache/thrift',
-    'src/java/com/twitter/common/base',
+# java_library(
+#   name = 'thrift',
+#   deps = [
+#     '//third_party/java/guava',
+#     '//third_party/thrift',
+#     '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+#     ':io',
+#   ],
+#   srcs = [ 'ThriftCodec.java' ]
+# )
+
+java_library(
+  name = 'json',
+  deps = [
+    '//third_party/java/gson',
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
     ':io',
   ],
-  sources = [ 'ThriftCodec.java' ]
-)
-
-java_library(name = 'json',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'io-json',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/code/gson',
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
-    ':io',
-  ],
-  sources = [ 'JsonCodec.java' ]
+  srcs = [ 'JsonCodec.java' ]
 )

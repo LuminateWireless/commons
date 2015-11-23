@@ -14,6 +14,9 @@
 # limitations under the License.
 # ==================================================================================================
 
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
 DYNAMIC_HOST_SET_SOURCES = ['pool/DynamicHostSet.java']
 
 URL_RESOLVER_SOURCES = [
@@ -21,67 +24,60 @@ URL_RESOLVER_SOURCES = [
   'UrlResolverUtil.java'
 ]
 
-java_library(name = 'dynamic-host-set',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'dynamic-host-set',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
+java_library(
+  name = 'dynamic-host-set',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
   ],
-  sources = DYNAMIC_HOST_SET_SOURCES
+  srcs = DYNAMIC_HOST_SET_SOURCES
 )
 
-java_library(name = 'util',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'net-util',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-codec',
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/collections',
+java_library(
+  name = 'util',
+  deps = [
+    '//third_party/java/apache/commons-codec',
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
   ],
-  sources = globs('*.java', exclude = [URL_RESOLVER_SOURCES])
+  srcs = glob(['*.java'], exclude = URL_RESOLVER_SOURCES)
 )
 
-java_library(name = 'url-resolver',
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
+java_library(
+  name = 'url-resolver',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
     ':util',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/stats:util',
-    'src/java/com/twitter/common/util',
-    'src/java/com/twitter/common/util/caching',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats:util',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util/caching',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
   ],
-  sources = URL_RESOLVER_SOURCES
+  srcs = URL_RESOLVER_SOURCES
 )
 
 # TODO(John Sirois): tease apart loadbalancing/monitoring/pool
-java_library(name = 'pool',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'net-pool',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/commons-codec',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/code/findbugs:jsr305',
+java_library(
+  name = 'pool',
+  deps = [
+    '//third_party/java/apache/commons-codec',
+    '//third_party/java/guava',
+    '//third_party/java/jsr305_annotations',
     ':dynamic-host-set',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/stats',
-    'src/java/com/twitter/common/util',
-    'src/java/com/twitter/common/util:system-mocks',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:system-mocks',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats:stats-provider',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/util:executor-service-shutdown',
   ],
-  sources = globs('pool/*.java', 'monitoring/*.java', 'loadbalancing/*.java',
-                  exclude = [DYNAMIC_HOST_SET_SOURCES])
+  srcs = glob(['pool/*.java', 'monitoring/*.java', 'loadbalancing/*.java'],
+              exclude = DYNAMIC_HOST_SET_SOURCES)
 )

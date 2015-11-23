@@ -14,24 +14,23 @@
 # limitations under the License.
 # ==================================================================================================
 
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
 java_library(
   name='http',
-  provides=artifact(
-    org='com.twitter.common',
-    name='application-http',
-    repo=public,
-  ),
-  dependencies=[
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/com/google/inject:guice',
-    '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
-    'src/java/com/twitter/common/application:action',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net/http',
-    'src/java/com/twitter/common/net/http/handlers',
+  deps=[
+    '//third_party/java/guava',
+    '//third_party/java/guice',
+    '//third_party/java/guice:guice-multibindings',
+    '//third_party/java/servlet-api',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/application:action',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/net/http/handlers',
   ],
-  sources=globs('*.java'),
+  srcs=glob(['*.java']),
   resources=[
-    'src/resources/com/twitter/common/application/http',
+    '//third_party/java/twitter-commons/src/resources/com/twitter/common/application/http',
   ]
 )

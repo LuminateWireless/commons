@@ -14,28 +14,41 @@
 # limitations under the License.
 # ==================================================================================================
 
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
 ARGSCANNER_DEFINITIONS=['Name.java']
 
-junit_tests(name='args',
-  dependencies=[
+java_test(
+  name='args',
+  deps=[
     ':argscanner-definitions',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/junit',
-    'src/java/com/twitter/common/args',
-    'src/java/com/twitter/common/args:apt',
-    'src/java/com/twitter/common/args:duration_parser',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/net:util',
-    'src/java/com/twitter/common/quantity',
+    '//third_party/java/guava',
+    '//third_party/java/junit',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    #'//third_party/java/twitter-commons/src/java/com/twitter/common/args:apt',
+    #'//third_party/java/twitter-commons/src/java/com/twitter/common/args:duration_parser',
   ],
-  sources=rglobs('*.java', exclude=[ARGSCANNER_DEFINITIONS]),
+  srcs=glob([
+    '*.java',
+    'parsers/*.java',
+    'argfilterstest/*.java',
+    'argfilterstest/subpackageA/*.java',
+    'argfilterstest/subpackageA/subsubpackage1/*.java',
+    'argfilterstest/subpackageB/*.java',
+    'argfilterstest/subpackageBwithSuffix/*.java'
+  ], exclude=ARGSCANNER_DEFINITIONS + ['parsers/TimeDurationParserTest.java'])
 )
 
-# ArgParser annotation definitions must be compiled in a separate round than
-# they are used from.
-java_library(name='argscanner-definitions',
-  dependencies=[
-    'src/java/com/twitter/common/args',
+java_library(
+  name='argscanner-definitions',
+  deps=[
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/guava',
   ],
-  sources=ARGSCANNER_DEFINITIONS,
+  srcs=ARGSCANNER_DEFINITIONS,
 )

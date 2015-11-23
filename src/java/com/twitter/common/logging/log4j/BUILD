@@ -14,16 +14,15 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name='log4j',
-  provides=artifact(
-    org='com.twitter.common.logging',
-    name='log4j',
-    repo=public,
-  ),
-  dependencies=[
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/log4j',
-    'src/java/com/twitter/common/logging',
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+java_library(
+  name = 'log4j',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/apache/log4j',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/logging',
   ],
-  sources=globs('*.java')
+  srcs = glob(['*.java'])
 )

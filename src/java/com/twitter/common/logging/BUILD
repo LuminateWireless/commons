@@ -14,19 +14,22 @@
 # limitations under the License.
 # ==================================================================================================
 
-java_library(name='logging',
-  provides=artifact(
-    org='com.twitter.common',
-    name='logging',
-    repo=public,
-  ),
-  dependencies=[
-    '3rdparty/jvm/commons-lang',
-    '3rdparty/jvm/com/google/guava',
-    '3rdparty/jvm/org/joda:joda-time',
-    'src/java/com/twitter/common/args',
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
+
+java_library(
+  name='logging',
+  deps=[
+    '//third_party/java/apache/commons-lang',
+    '//third_party/java/guava',
+    '//third_party/java/joda:joda-time',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args',
+    '//third_party/java/jsr305_annotations',
   ],
-  sources=[
+  plugins = [
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/args:apt',
+  ],
+  srcs=[
     'Glog.java',
     'Log.java',
     'LogUtil.java',
@@ -35,17 +38,13 @@ java_library(name='logging',
   ]
 )
 
-java_library(name='buffered',
-  provides=artifact(
-    org='com.twitter.common',
-    name='logging-buffered',
-    repo=public,
-  ),
-  dependencies=[
-    '3rdparty/jvm/com/google/guava',
+java_library(
+  name='buffered',
+  deps=[
+    '//third_party/java/guava',
     ':logging',
-    'src/java/com/twitter/common/quantity',
-    'src/java/com/twitter/common/stats',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/quantity',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats',
   ],
-  sources=[ 'BufferedLog.java' ]
+  srcs=[ 'BufferedLog.java' ]
 )

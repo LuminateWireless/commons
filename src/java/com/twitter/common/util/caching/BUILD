@@ -15,18 +15,16 @@
 # ==================================================================================================
 
 
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
 
-java_library(name = 'caching',
-  provides = artifact(
-    org = 'com.twitter.common',
-    name = 'util-caching',
-    repo = public,
-  ),
-  dependencies = [
-    '3rdparty/jvm/com/google/guava',
-    'src/java/com/twitter/common/base',
-    'src/java/com/twitter/common/collections',
-    'src/java/com/twitter/common/stats',
+java_library(
+  name = 'caching',
+  deps = [
+    '//third_party/java/guava',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/base',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/collections',
+    '//third_party/java/twitter-commons/src/java/com/twitter/common/stats',
   ],
-  sources = globs('*.java')
+  srcs = glob(['*.java'])
 )

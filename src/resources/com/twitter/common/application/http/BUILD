@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==================================================================================================
+package(default_visibility = ['//visibility:public'])
+licenses(['notice'])
 
-resources(
+filegroup(
   name='http',
-  sources=[
+  srcs=[
     'graphview/dygraph-combined.js',
     'graphview/dygraph-extra.js',
     'graphview/grapher.js',
